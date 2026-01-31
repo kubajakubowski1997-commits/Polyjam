@@ -15,15 +15,15 @@ public class GoodThoughtMovement : MonoBehaviour
 
     private Vector3 offset;
 
-    private void Awake()
-    {
-        GameObject fp = GameObject.FindWithTag("PlayerHead");
-        if (fp != null)
-            focalPoint = fp.transform;
-    }
-
     private void OnEnable()
     {
+        if (focalPoint == null)
+        {
+            GameObject fp = GameObject.FindWithTag("PlayerHead");
+            if (fp != null)
+                focalPoint = fp.transform;
+        }
+
         if (focalPoint == null) return;
 
         // 🔑 KLUCZ: zachowujemy losowy spawn

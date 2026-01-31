@@ -11,9 +11,21 @@ public class BadIdeaSpawner : MonoBehaviour
     public float minSpawnTime = 2.5f;
     public float maxSpawnTime = 7f;
 
-    private void Start()
+    private Coroutine spawnRoutine;
+
+    private void OnEnable()
     {
-        StartCoroutine(SpawnRoutine());
+        if (spawnRoutine == null)
+            spawnRoutine = StartCoroutine(SpawnRoutine());
+    }
+
+    private void OnDisable()
+    {
+        if (spawnRoutine != null)
+        {
+            StopCoroutine(spawnRoutine);
+            spawnRoutine = null;
+        }
     }
 
     private IEnumerator SpawnRoutine()

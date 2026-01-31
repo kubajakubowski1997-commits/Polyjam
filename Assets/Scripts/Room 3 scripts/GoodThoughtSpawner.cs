@@ -20,7 +20,7 @@ public class GoodThoughtSpawner : MonoBehaviour
 
     private Coroutine spawnRoutine;
 
-    private void Start()
+    private void OnEnable()
     {
         // zabezpieczenie przed wieloma coroutine
         if (spawnRoutine == null)
