@@ -1,9 +1,16 @@
+using System.Linq;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CameraSwitcher : MonoBehaviour
 {
+    [SerializeField] private Canvas room1Canvas;
+    [SerializeField] private Canvas room2Canvas;
+    [SerializeField] private Canvas room3Canvas;
+    [SerializeField] private Canvas room4Canvas;
+    [SerializeField] private Canvas room5Canvas;
+    
     [Header("Cameras")]
     [SerializeField] private CinemachineVirtualCameraBase[] cameras;
 
@@ -66,5 +73,44 @@ public class CameraSwitcher : MonoBehaviour
         }
 
         currentCamIndex = index;
+
+        if (index == 0)
+        {
+            deactivateAll();
+            room1Canvas.gameObject.SetActive(true);
+        }
+
+        if (index == 1)
+        {
+            deactivateAll();
+            room2Canvas.gameObject.SetActive(true);
+        }
+
+        if (index == 2)
+        {
+            deactivateAll();
+            room3Canvas.gameObject.SetActive(true);
+        }
+
+        if (index == 3)
+        {
+            deactivateAll();
+            room4Canvas.gameObject.SetActive(true);
+        }
+
+        if (index == 4)
+        {
+            deactivateAll();
+            room5Canvas.gameObject.SetActive(true);
+        }
+            
+    }
+
+    private void deactivateAll()
+    {
+        new Canvas[] { room1Canvas, room2Canvas, room3Canvas, room4Canvas, room5Canvas }
+            .Where(c => c != null)
+            .ToList()
+            .ForEach(c => c.gameObject.SetActive(false));
     }
 }

@@ -1079,6 +1079,7 @@ GameObject:
   m_Component:
   - component: {fileID: 387917090}
   - component: {fileID: 387917091}
+  - component: {fileID: 387917092}
   m_Layer: 0
   m_Name: Room3PlayerController
   m_TagString: Untagged
@@ -1118,6 +1119,36 @@ MonoBehaviour:
   sideSpeed: 1000
   deadzone: 0.15
   steerSmoothing: 12
+--- !u!114 &387917092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 387917089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 26a3c61f4aca4f94597f317923b46122, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: d36e46a7-dfea-43e2-8ffb-68098abca256
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -3072,7 +3103,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1043526763}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -6124,6 +6155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a9057a4e9a6dca41b8dbdbf7daceb24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  room3Canvas: {fileID: 474797778}
   cameras:
   - {fileID: 1704767318}
   - {fileID: 2071116958}
