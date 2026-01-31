@@ -2,7 +2,7 @@
     "name": "Controls",
     "maps": [
         {
-            "name": "Player",
+            "name": "Player Room 2",
             "id": "6d24459d-2c80-4fd3-b946-f80a8499e2b2",
             "actions": [
                 {
@@ -41,33 +41,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
-                },
-                {
-                    "name": "catchGoodThought",
-                    "type": "Button",
-                    "id": "eea9bebc-616b-4774-ac9b-526fbed21f8d",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "catchBadThought",
-                    "type": "Button",
-                    "id": "fd6fe258-2e0c-4bab-b9b3-b587c56200c1",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "rightStickMove",
-                    "type": "Value",
-                    "id": "61e14e2f-409d-4855-875f-7ca1693334e8",
-                    "expectedControlType": "Stick",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -81,37 +54,52 @@
                     "action": "leftStickMove",
                     "isComposite": false,
                     "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Player Room 1",
+            "id": "52255451-16d0-4bf3-9531-21838f6be037",
+            "actions": [
+                {
+                    "name": "BalanceUD",
+                    "type": "Value",
+                    "id": "5fa78fc5-4a2d-465c-9e7b-f1f04e91c196",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
+                    "name": "BalanceLR",
+                    "type": "Value",
+                    "id": "9052438a-8dd4-4cbe-915c-b205f8f61376",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
                     "name": "",
-                    "id": "45cdd022-f0c0-459c-bfdc-3a41176ef8be",
-                    "path": "<Gamepad>/leftTrigger",
+                    "id": "34ce617f-82ed-406e-b3d9-e110a5f8a2ef",
+                    "path": "<Gamepad>/leftStick/y",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "catchGoodThought",
+                    "action": "BalanceUD",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "18314018-b511-48ce-a01f-145473edb685",
-                    "path": "<Gamepad>/rightTrigger",
+                    "id": "41ce5b87-a1c6-48bf-ba55-6aab1e80d21d",
+                    "path": "<Gamepad>/rightStick/x",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "catchBadThought",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d240db9a-906f-4e37-a88d-3771b152261c",
-                    "path": "<Gamepad>/rightStick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "rightStickMove",
+                    "action": "BalanceLR",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
