@@ -30,7 +30,7 @@ public class GoodThoughtSpawner : MonoBehaviour
     private IEnumerator SpawnRoutine()
     {
         // losowe opóźnienie pierwszego spawnu
-        yield return new WaitForSeconds(Random.Range(minSpawnTime, maxSpawnTime));
+        //yield return new WaitForSeconds(Random.Range(minSpawnTime, maxSpawnTime));
 
         while (true)
         {

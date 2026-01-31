@@ -975,8 +975,6 @@ MonoBehaviour:
   - {fileID: 1704767318}
   - {fileID: 2071116958}
   - {fileID: 139640771}
-  - {fileID: 624797932}
-  - {fileID: 229768049}
   autoInitialize: 0
 --- !u!4 &1690268551
 Transform:
