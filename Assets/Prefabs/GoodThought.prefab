@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5736082203336994715}
   - component: {fileID: 2305889452120213351}
   - component: {fileID: 5670179222490185740}
+  - component: {fileID: 6338001540534201599}
   m_Layer: 0
   m_Name: GoodThought
   m_TagString: Untagged
@@ -136,3 +137,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6338001540534201599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8413235534669416334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88286330256b37d41835c6ee162dcab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orbitSpeed: 30
+  verticalAmplitude: 0.25
+  verticalDuration: 2

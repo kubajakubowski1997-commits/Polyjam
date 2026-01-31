@@ -900,7 +900,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8376888191234190126}
-  - component: {fileID: 8079293470700592297}
+  - component: {fileID: 2673239822452698134}
   m_Layer: 0
   m_Name: HeadFocalPoint
   m_TagString: PlayerHead
@@ -923,7 +923,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1523563723787906662}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8079293470700592297
+--- !u!114 &2673239822452698134
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -937,10 +937,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   headFocalPoint: {fileID: 8376888191234190126}
   goodThoughtPrefab: {fileID: 8413235534669416334, guid: e8810f32983f98b4ea4186399ff02b7a, type: 3}
-  minDistance: 1.5
-  maxDistance: 3.5
-  minSpawnTime: 0.8
-  maxSpawnTime: 2.5
+  minDistance: 2.5
+  maxDistance: 6
+  minSpawnTime: 8
+  maxSpawnTime: 16
 --- !u!1001 &5265595190129178103
 PrefabInstance:
   m_ObjectHideFlags: 0
