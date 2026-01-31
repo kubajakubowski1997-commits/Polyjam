@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class AnalogController : MonoBehaviour
+public class AnalogController : MonoBehaviour, IRoomResettable
 {
     [Header("Cursors")]
     public RectTransform cursorLeft;
@@ -10,6 +10,7 @@ public class AnalogController : MonoBehaviour
 
     [Header("Movement")]
     public float sideSpeed = 1000f;
+    public bool useDifficultyScaling = true;
 
     [Header("Input tuning")]
     public float deadzone = 0.15f;
@@ -20,6 +21,8 @@ public class AnalogController : MonoBehaviour
 
     private Vector2 leftSmooth;
     private Vector2 rightSmooth;
+    private Vector2 leftStartPos;
+    private Vector2 rightStartPos;
 
     // --- Input System ---
     public void OnLeftStickMove(InputValue value)
@@ -108,7 +111,8 @@ public class AnalogController : MonoBehaviour
 
     private void MoveCursor(RectTransform cursor, Vector2 input)
     {
-        Vector2 delta = input * sideSpeed * Time.deltaTime;
+        float diff = useDifficultyScaling ? GameManager.Difficulty : 1f;
+        Vector2 delta = input * sideSpeed * diff * Time.deltaTime;
         cursor.anchoredPosition += delta;
 
         Vector2 clampedPos = cursor.anchoredPosition;
@@ -134,5 +138,21 @@ public class AnalogController : MonoBehaviour
             }
         }
         return null;
+    }
+
+    private void Start()
+    {
+        if (cursorLeft != null) leftStartPos = cursorLeft.anchoredPosition;
+        if (cursorRight != null) rightStartPos = cursorRight.anchoredPosition;
+    }
+
+    public void ResetRoom()
+    {
+        leftRaw = Vector2.zero;
+        rightRaw = Vector2.zero;
+        leftSmooth = Vector2.zero;
+        rightSmooth = Vector2.zero;
+        if (cursorLeft != null) cursorLeft.anchoredPosition = leftStartPos;
+        if (cursorRight != null) cursorRight.anchoredPosition = rightStartPos;
     }
 }
