@@ -2,62 +2,6 @@
     "name": "Controls",
     "maps": [
         {
-            "name": "Player Room 2",
-            "id": "6d24459d-2c80-4fd3-b946-f80a8499e2b2",
-            "actions": [
-                {
-                    "name": "Steer",
-                    "type": "Value",
-                    "id": "1bbd2ccd-44ec-4c28-a0c4-b67e5742c4fb",
-                    "expectedControlType": "Axis",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "9916c7e4-6577-4d4a-b0c9-1be5baa936a5",
-                    "path": "<Gamepad>/leftStick/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Steer",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "Player Room 3",
-            "id": "d36e46a7-dfea-43e2-8ffb-68098abca256",
-            "actions": [
-                {
-                    "name": "leftStickMove",
-                    "type": "Value",
-                    "id": "52a00975-83aa-470c-a719-fd597f483d00",
-                    "expectedControlType": "Stick",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "dd2886a3-b9c8-45f6-bd97-534344f04a7b",
-                    "path": "<Gamepad>/leftStick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "leftStickMove",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
             "name": "Player Room 1",
             "id": "52255451-16d0-4bf3-9531-21838f6be037",
             "actions": [
@@ -100,6 +44,122 @@
                     "processors": "",
                     "groups": "",
                     "action": "BalanceLR",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Player Room 2",
+            "id": "6d24459d-2c80-4fd3-b946-f80a8499e2b2",
+            "actions": [
+                {
+                    "name": "Steer",
+                    "type": "Value",
+                    "id": "1bbd2ccd-44ec-4c28-a0c4-b67e5742c4fb",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "9916c7e4-6577-4d4a-b0c9-1be5baa936a5",
+                    "path": "<Gamepad>/leftStick/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Steer",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Player Room 3",
+            "id": "d36e46a7-dfea-43e2-8ffb-68098abca256",
+            "actions": [
+                {
+                    "name": "leftStickMove",
+                    "type": "Value",
+                    "id": "52a00975-83aa-470c-a719-fd597f483d00",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "rightStickMove",
+                    "type": "Value",
+                    "id": "b69dbbfb-190b-4cb5-bf37-397f33404b08",
+                    "expectedControlType": "Stick",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "leftTrigger",
+                    "type": "Button",
+                    "id": "04739d56-d9a6-4001-bb25-b9069042bc0b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "rightTrigger",
+                    "type": "Button",
+                    "id": "45cc3a99-433d-424b-b6e5-05eb45a41026",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "dd2886a3-b9c8-45f6-bd97-534344f04a7b",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "leftStickMove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "da752547-58b3-4625-b843-6e2306d47dcc",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "rightStickMove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d87875a5-c60b-4376-bbc5-58f70a40eb69",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "leftTrigger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d74b5bab-88fb-432b-bf5e-2fc0b482829d",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "rightTrigger",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
