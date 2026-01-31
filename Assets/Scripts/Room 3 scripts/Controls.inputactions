@@ -41,6 +41,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "catchGoodThought",
+                    "type": "Button",
+                    "id": "eea9bebc-616b-4774-ac9b-526fbed21f8d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "catchBadThought",
+                    "type": "Button",
+                    "id": "fd6fe258-2e0c-4bab-b9b3-b587c56200c1",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -52,6 +70,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "leftStickMove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "45cdd022-f0c0-459c-bfdc-3a41176ef8be",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "catchGoodThought",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "18314018-b511-48ce-a01f-145473edb685",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "catchBadThought",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
