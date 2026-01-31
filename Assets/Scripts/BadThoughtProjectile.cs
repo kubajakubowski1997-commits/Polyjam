@@ -37,4 +37,14 @@ public class BadThoughtProjectile : MonoBehaviour
         if (fraction >= 1f)
             Destroy(gameObject);
     }
+
+    public void OnHit()
+    {
+        Debug.Log("GoodThought trafiony: " + name);
+
+        // Tutaj możesz dodać animację, efekt, dźwięk itp.
+
+        // Na razie zniszczenie obiektu:
+        Destroy(gameObject);
+    }
 }
