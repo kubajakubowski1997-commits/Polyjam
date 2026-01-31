@@ -7361,8 +7361,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48f99380e3af6254aad046579bb89605, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPoints: []
-  ballPrefab: {fileID: 0}
+  spawnPoints:
+  - {fileID: 902721637}
+  - {fileID: 1961593499}
+  badThoughtPrefab: {fileID: 8943850658812540576, guid: 8c623194fda4bee4a9a94a5142a57841, type: 3}
   minSpawnTime: 0.5
   maxSpawnTime: 2
 --- !u!1001 &8365512300406991478
