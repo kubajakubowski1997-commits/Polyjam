@@ -12,11 +12,11 @@ GameObject:
   - component: {fileID: 2394219867605948409}
   - component: {fileID: 2554258359379261132}
   - component: {fileID: 3556221742584975128}
-  - component: {fileID: 8820954923025277779}
   - component: {fileID: 4538362639845174414}
+  - component: {fileID: 2007858679526428761}
   m_Layer: 0
   m_Name: BadThought
-  m_TagString: Untagged
+  m_TagString: BadThought
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -110,21 +110,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8820954923025277779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8943850658812540576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c5d9d9c6e267424c8fbfed7c19a7f21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetObject: {fileID: 0}
-  speed: 10
-  arcHeight: 2
 --- !u!54 &4538362639845174414
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -152,3 +137,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2007858679526428761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8943850658812540576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c5d9d9c6e267424c8fbfed7c19a7f21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 10
+  arcHeight: 2
