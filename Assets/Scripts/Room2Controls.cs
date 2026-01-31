@@ -19,14 +19,16 @@ using UnityEngine.InputSystem;
 /// bo akcja nazywa się "Steer"
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
-public class Room2Controls : MonoBehaviour
+public class Room2Controls : MonoBehaviour, IRoomResettable
 {
+    // Room2 runner: always forward (Z), steer on X with left stick.
     [Header("Movement")]
     [Tooltip("Stała prędkość do przodu (Z).")]
     public float forwardSpeed = 6f;
 
     [Tooltip("Maksymalna prędkość w bok (X) przy pełnym wychyleniu gałki.")]
     public float sideSpeed = 4f;
+    public bool useDifficultyScaling = true;
 
     [Header("Input tuning")]
     [Tooltip("Martwa strefa gałki, żeby nie driftowała.")]
@@ -36,6 +38,7 @@ public class Room2Controls : MonoBehaviour
     public float steerSmoothing = 12f;
 
     private Rigidbody rb;
+    private Vector3 startPos;
 
     // Surowa wartość z gałki (-1..1)
     private float steerRaw;
@@ -46,6 +49,8 @@ public class Room2Controls : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        // Save start position for reset
+        startPos = transform.position;
 
         // Żeby fizyka nie przewracała obiektu
         rb.constraints |= RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
@@ -65,6 +70,7 @@ public class Room2Controls : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // Physics movement with optional difficulty scaling
         // 1) Deadzone – małe wartości traktujemy jak 0
         float s = Mathf.Abs(steerRaw) < deadzone ? 0f : steerRaw;
 
@@ -80,12 +86,26 @@ public class Room2Controls : MonoBehaviour
         }
 
         // 3) Ruch: stały przód + bok zależny od wychylenia gałki
+        float diff = useDifficultyScaling ? GameManager.Difficulty : 1f;
         Vector3 velocity = rb.linearVelocity;
-        velocity.z = forwardSpeed;
-        velocity.x = steerSmooth * sideSpeed;
+        velocity.z = forwardSpeed * diff;
+        velocity.x = steerSmooth * sideSpeed * diff;
         rb.linearVelocity = velocity;
 
         // Jeśli skręca w złą stronę:
         // velocity.x = -steerSmooth * sideSpeed;
+    }
+
+    public void ResetRoom()
+    {
+        // Reset velocity and position
+        steerRaw = 0f;
+        steerSmooth = 0f;
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+        transform.position = startPos;
     }
 }

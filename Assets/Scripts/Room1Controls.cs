@@ -1,116 +1,156 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class Room1Controls : MonoBehaviour
+public class Room1Controls : MonoBehaviour, IRoomResettable
 {
+    // Room1: two sliders. Red = player, green = target. Fail when no overlap on both axes.
     [Header("UI")]
-    public Slider sliderUD;
-    public Slider sliderLR;
     public RectTransform udCurrentMarker;
     public RectTransform lrCurrentMarker;
     public RectTransform udTargetWindow;
     public RectTransform lrTargetWindow;
+    public Slider sliderUD;
+    public Slider sliderLR;
 
-    [Header("Gameplay")]
-    public float tolerance = 0.07f;
-    public float failGraceTime = 0.4f;
+    [Header("Target Movement")]
     public float targetAmplitude = 0.35f;
-    public float targetSpeed = 0.12f;
+    public float targetSpeed = 0.2f;
+    public float targetChangeInterval = 0.25f;
 
     [Header("Input")]
     public float deadzone = 0.12f;
-    public float inputSmoothing = 16f;
-    public float inputScale = 0.8f;
+    public float inputScale = 1f;
     public float cursorSpeed = 0.9f;
-    public bool invertUD = false;
-    public bool invertLR = false;
-    public bool autoInvertFromUI = true;
+    public bool useDifficultyScaling = true;
+
+    [Header("Fail")]
+    public float failGraceTime = 0.4f;
+    public UnityEvent onFail;
 
     float udRaw;
     float lrRaw;
     float ud;
     float lr;
-    float udInputSmooth;
-    float lrInputSmooth;
     float udTarget;
     float lrTarget;
-    float udTargetSmooth;
-    float lrTargetSmooth;
+    float targetTimer;
+    Vector2 targetVel;
     float outsideTimer;
-    float seedU;
-    float seedL;
+
+    public float UDInput => udRaw;
 
     public void OnBalanceUD(InputValue v) => udRaw = v.Get<float>();
     public void OnBalanceLR(InputValue v) => lrRaw = v.Get<float>();
 
+    void Awake()
+    {
+        if (onFail == null) onFail = new UnityEvent();
+    }
+
     void Start()
     {
-        seedU = Random.value * 1000f;
-        seedL = Random.value * 1000f;
-
-        if (autoInvertFromUI)
-        {
-            if (sliderUD)
-            {
-                float dotUp = Vector3.Dot(sliderUD.transform.up, Vector3.up);
-                if (dotUp < 0f) invertUD = !invertUD;
-            }
-
-            if (sliderLR)
-            {
-                float dotRight = Vector3.Dot(sliderLR.transform.right, Vector3.right);
-                if (dotRight < 0f) invertLR = !invertLR;
-            }
-        }
+        targetTimer = Random.Range(0.05f, targetChangeInterval);
     }
 
     void Update()
     {
+        // Input with "memory": stick moves marker, release keeps last position.
+        // Input -> przesuwanie z „pamięcią” (nie wraca do środka)
         float udD = Mathf.Abs(udRaw) < deadzone ? 0f : udRaw;
         float lrD = Mathf.Abs(lrRaw) < deadzone ? 0f : lrRaw;
-        if (invertUD) udD = -udD;
-        if (invertLR) lrD = -lrD;
-        udD *= inputScale;
-        lrD *= inputScale;
+        float diff = useDifficultyScaling ? GameManager.Difficulty : 1f;
+        float moveSpeed = cursorSpeed * diff;
+        ud += udD * inputScale * moveSpeed * Time.deltaTime;
+        lr += lrD * inputScale * moveSpeed * Time.deltaTime;
+        ud = Mathf.Clamp(ud, -1f, 1f);
+        lr = Mathf.Clamp(lr, -1f, 1f);
 
-        if (inputSmoothing > 0f)
+        // Target: slow random drift (can change direction any time).
+        float targetSpeedScaled = useDifficultyScaling ? targetSpeed * diff : targetSpeed;
+        if (targetSpeedScaled <= 0f)
         {
-            float t = 1f - Mathf.Exp(-inputSmoothing * Time.deltaTime);
-            udInputSmooth = Mathf.Lerp(udInputSmooth, udD, t);
-            lrInputSmooth = Mathf.Lerp(lrInputSmooth, lrD, t);
+            targetVel = Vector2.zero;
         }
         else
         {
-            udInputSmooth = udD;
-            lrInputSmooth = lrD;
+            targetTimer -= Time.deltaTime;
+            if (targetTimer <= 0f)
+            {
+                Vector2 jitter = Random.insideUnitCircle * targetSpeedScaled;
+                targetVel += jitter;
+                if (targetVel.magnitude > targetSpeedScaled)
+                {
+                    targetVel = targetVel.normalized * targetSpeedScaled;
+                }
+                targetTimer = targetChangeInterval;
+            }
+
+            udTarget += targetVel.x * Time.deltaTime;
+            lrTarget += targetVel.y * Time.deltaTime;
         }
 
-        ud = Mathf.Clamp(ud + udInputSmooth * cursorSpeed * Time.deltaTime, -1f, 1f);
-        lr = Mathf.Clamp(lr + lrInputSmooth * cursorSpeed * Time.deltaTime, -1f, 1f);
+        if (targetAmplitude <= 0f)
+        {
+            udTarget = 0f;
+            lrTarget = 0f;
+            targetVel = Vector2.zero;
+        }
+        else if (udTarget < -targetAmplitude)
+        {
+            udTarget = -targetAmplitude;
+            targetVel.x = Mathf.Abs(targetVel.x);
+        }
+        else if (udTarget > targetAmplitude)
+        {
+            udTarget = targetAmplitude;
+            targetVel.x = -Mathf.Abs(targetVel.x);
+        }
 
-        udTarget = (Mathf.PerlinNoise(seedU, Time.time * targetSpeed) * 2f - 1f) * targetAmplitude;
-        lrTarget = (Mathf.PerlinNoise(seedL, Time.time * targetSpeed) * 2f - 1f) * targetAmplitude;
+        if (lrTarget < -targetAmplitude)
+        {
+            lrTarget = -targetAmplitude;
+            targetVel.y = Mathf.Abs(targetVel.y);
+        }
+        else if (lrTarget > targetAmplitude)
+        {
+            lrTarget = targetAmplitude;
+            targetVel.y = -Mathf.Abs(targetVel.y);
+        }
 
-        float tt = 1f - Mathf.Exp(-6f * Time.deltaTime);
-        udTargetSmooth = Mathf.Lerp(udTargetSmooth, udTarget, tt);
-        lrTargetSmooth = Mathf.Lerp(lrTargetSmooth, lrTarget, tt);
+        // UI positions
+        PlaceMarker(udCurrentMarker, sliderUD, To01(ud));
+        PlaceMarker(lrCurrentMarker, sliderLR, To01(lr));
+        PlaceMarker(udTargetWindow, sliderUD, To01(udTarget));
+        PlaceMarker(lrTargetWindow, sliderLR, To01(lrTarget));
 
-        bool inside =
-            Mathf.Abs(ud - udTargetSmooth) <= tolerance &&
-            Mathf.Abs(lr - lrTargetSmooth) <= tolerance;
+        // Overlap on each axis (UD and LR separately)
+        bool insideUD = OverlapsAxisBounds(udCurrentMarker, udTargetWindow, sliderUD);
+        bool insideLR = OverlapsAxisBounds(lrCurrentMarker, lrTargetWindow, sliderLR);
+        bool inside = insideUD && insideLR;
 
         outsideTimer = inside ? 0f : outsideTimer + Time.deltaTime;
         if (outsideTimer >= failGraceTime)
         {
-            Debug.Log("FAIL: spadles z krzesla");
             outsideTimer = 0f;
+            Debug.Log("[Room1] FAIL");
+            onFail.Invoke();
         }
+    }
 
-        PlaceMarker(udCurrentMarker, sliderUD, To01(ud));
-        PlaceMarker(lrCurrentMarker, sliderLR, To01(lr));
-        PlaceWindow(udTargetWindow, sliderUD, To01(udTargetSmooth), tolerance);
-        PlaceWindow(lrTargetWindow, sliderLR, To01(lrTargetSmooth), tolerance);
+    public void ResetRoom()
+    {
+        // Reset all state to start
+        udRaw = 0f;
+        lrRaw = 0f;
+        ud = 0f;
+        lr = 0f;
+        udTarget = 0f;
+        lrTarget = 0f;
+        targetVel = Vector2.zero;
+        targetTimer = Random.Range(0.05f, targetChangeInterval);
+        outsideTimer = 0f;
     }
 
     static float To01(float v) => (v + 1f) * 0.5f;
@@ -140,41 +180,22 @@ public class Room1Controls : MonoBehaviour
         marker.anchoredPosition = pos;
     }
 
-    static void PlaceWindow(RectTransform window, Slider slider, float target01, float tol)
+    static bool OverlapsAxisBounds(RectTransform current, RectTransform target, Slider slider)
     {
-        if (!window || !slider) return;
-
-        RectTransform r = slider.GetComponent<RectTransform>();
-        float tol01Half = tol * 0.5f;
-
-        float min01 = Mathf.Clamp01(target01 - tol01Half);
-        float max01 = Mathf.Clamp01(target01 + tol01Half);
-
-        Vector2 pos = window.anchoredPosition;
-        Vector2 size = window.sizeDelta;
+        if (!current || !target || !slider) return true;
 
         bool vertical =
             slider.direction == Slider.Direction.BottomToTop ||
             slider.direction == Slider.Direction.TopToBottom;
 
-        if (vertical)
-        {
-            float h = r.rect.height;
-            float yMin = Mathf.Lerp(-h * 0.5f, h * 0.5f, min01);
-            float yMax = Mathf.Lerp(-h * 0.5f, h * 0.5f, max01);
-            pos.y = (yMin + yMax) * 0.5f;
-            size.y = Mathf.Abs(yMax - yMin);
-        }
-        else
-        {
-            float w = r.rect.width;
-            float xMin = Mathf.Lerp(-w * 0.5f, w * 0.5f, min01);
-            float xMax = Mathf.Lerp(-w * 0.5f, w * 0.5f, max01);
-            pos.x = (xMin + xMax) * 0.5f;
-            size.x = Mathf.Abs(xMax - xMin);
-        }
+        Bounds cur = RectTransformUtility.CalculateRelativeRectTransformBounds(slider.transform, current);
+        Bounds tar = RectTransformUtility.CalculateRelativeRectTransformBounds(slider.transform, target);
 
-        window.anchoredPosition = pos;
-        window.sizeDelta = size;
+        float curMin = vertical ? cur.min.y : cur.min.x;
+        float curMax = vertical ? cur.max.y : cur.max.x;
+        float tarMin = vertical ? tar.min.y : tar.min.x;
+        float tarMax = vertical ? tar.max.y : tar.max.x;
+
+        return curMax >= tarMin && tarMax >= curMin;
     }
 }
