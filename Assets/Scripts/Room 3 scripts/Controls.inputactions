@@ -58,7 +58,16 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "rightStickMove",
+                    "type": "Value",
+                    "id": "61e14e2f-409d-4855-875f-7ca1693334e8",
+                    "expectedControlType": "Stick",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -87,11 +96,22 @@
                 {
                     "name": "",
                     "id": "18314018-b511-48ce-a01f-145473edb685",
-                    "path": "",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "catchBadThought",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d240db9a-906f-4e37-a88d-3771b152261c",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "rightStickMove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
