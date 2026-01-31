@@ -1,9 +1,8 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class AnalogController : MonoBehaviour
+public class AnalogController : MonoBehaviour, IRoomResettable
 {
     [Header("Cursors")]
     public RectTransform cursorLeft;
@@ -11,6 +10,7 @@ public class AnalogController : MonoBehaviour
 
     [Header("Movement")]
     public float sideSpeed = 1000f;
+    public bool useDifficultyScaling = true;
 
     [Header("Input tuning")]
     public float deadzone = 0.15f;
@@ -21,6 +21,8 @@ public class AnalogController : MonoBehaviour
 
     private Vector2 leftSmooth;
     private Vector2 rightSmooth;
+    private Vector2 leftStartPos;
+    private Vector2 rightStartPos;
 
     // --- Input System ---
     public void OnLeftStickMove(InputValue value)
@@ -49,9 +51,6 @@ public class AnalogController : MonoBehaviour
 
             if (Gamepad.current != null && Gamepad.current.leftTrigger.wasPressedThisFrame)
             {
-                //if (Gamepad.current != null)
-                    StartCoroutine(Vibrate(0f, 0.5f, 0.35f)); // lowMotor, highMotor, czas
-                
                 GameObject hitObj = ShootFromCrosshair(cursorLeft, "GoodThought", activeCam); // FIX
                 if (hitObj != null)
                 {
@@ -60,9 +59,6 @@ public class AnalogController : MonoBehaviour
                     // FIX: bezpieczne wywołanie OnHit
                     var good = hitObj.GetComponent<GoodThoughtMovement>();
                     if (good != null) good.OnHit();
-                    
-                    Gamepad.current.SetMotorSpeeds(0.6f, 0.0f); // lewy silnik 30%, prawy 0%
-                    StartCoroutine(StopRumble(0.60f)); 
                 }
             }
         }
@@ -86,9 +82,6 @@ public class AnalogController : MonoBehaviour
                     // Bezpieczne wywołanie OnHit
                     var bad = hitObj.GetComponent<BadThoughtProjectile>();
                     if (bad != null) bad.OnHit();
-                    
-                    Gamepad.current.SetMotorSpeeds(0.0f, 0.6f); // lewy silnik 0%, prawy 30%
-                    StartCoroutine(StopRumble(0.15f));
                 }
             }
         }
@@ -118,7 +111,8 @@ public class AnalogController : MonoBehaviour
 
     private void MoveCursor(RectTransform cursor, Vector2 input)
     {
-        Vector2 delta = input * sideSpeed * Time.deltaTime;
+        float diff = useDifficultyScaling ? GameManager.Difficulty : 1f;
+        Vector2 delta = input * sideSpeed * diff * Time.deltaTime;
         cursor.anchoredPosition += delta;
 
         Vector2 clampedPos = cursor.anchoredPosition;
@@ -145,22 +139,20 @@ public class AnalogController : MonoBehaviour
         }
         return null;
     }
-    
-    private IEnumerator StopRumble(float duration)
+
+    private void Start()
     {
-        yield return new WaitForSeconds(duration);
-        if (Gamepad.current != null)
-            Gamepad.current.SetMotorSpeeds(0f, 0f);
+        if (cursorLeft != null) leftStartPos = cursorLeft.anchoredPosition;
+        if (cursorRight != null) rightStartPos = cursorRight.anchoredPosition;
     }
-    
-    private IEnumerator Vibrate(float lowMotor, float highMotor, float duration)
+
+    public void ResetRoom()
     {
-        //if (Gamepad.current != null)
-            Gamepad.current.SetMotorSpeeds(lowMotor, highMotor);
-
-        yield return new WaitForSeconds(duration);
-
-        //if (Gamepad.current != null)
-            Gamepad.current.SetMotorSpeeds(0f, 0f);
+        leftRaw = Vector2.zero;
+        rightRaw = Vector2.zero;
+        leftSmooth = Vector2.zero;
+        rightSmooth = Vector2.zero;
+        if (cursorLeft != null) cursorLeft.anchoredPosition = leftStartPos;
+        if (cursorRight != null) cursorRight.anchoredPosition = rightStartPos;
     }
 }

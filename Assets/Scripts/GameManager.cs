@@ -1,0 +1,143 @@
+using System;
+using UnityEngine;
+using UnityEngine.Events;
+
+public class GameManager : MonoBehaviour
+{
+    [Serializable]
+    public class RoomEntry
+    {
+        public string name;
+        public int cameraIndex;
+        public GameObject roomRoot;
+        public MonoBehaviour[] resetBehaviours;
+    }
+
+    [Header("Refs")]
+    public CameraSwitcher cameraSwitcher;
+
+    [Header("Rooms")]
+    public RoomEntry[] rooms;
+    public float roomDuration = 10f;
+    public bool avoidRepeat = true;
+
+    [Header("Difficulty")]
+    public float difficultyStart = 1f;
+    public float difficultyIncreasePerSecond = 0.02f;
+    public float difficultyMax = 3f;
+    public bool useTimeScale = false;
+    public float timeScaleBase = 1f;
+    public float timeScalePerDifficulty = 0.3f;
+    public float timeScaleMax = 2.5f;
+
+    [Header("Game Over")]
+    public UnityEvent onGameOver;
+
+    public static float Difficulty { get; private set; } = 1f;
+
+    int currentRoom = -1;
+    float roomTimer;
+    bool gameOver;
+
+    void Awake()
+    {
+        Difficulty = Mathf.Max(0.1f, difficultyStart);
+    }
+
+    void Start()
+    {
+        // Pick first room on start
+        if (cameraSwitcher == null) cameraSwitcher = FindObjectOfType<CameraSwitcher>();
+        if (rooms != null && rooms.Length > 0)
+        {
+            SwitchToRandomRoom();
+        }
+    }
+
+    void Update()
+    {
+        if (gameOver) return;
+
+        // Global difficulty ramp
+        Difficulty = Mathf.Min(difficultyMax, Difficulty + difficultyIncreasePerSecond * Time.deltaTime);
+        if (useTimeScale)
+        {
+            float ts = timeScaleBase + Difficulty * timeScalePerDifficulty;
+            Time.timeScale = Mathf.Clamp(ts, timeScaleBase, timeScaleMax);
+        }
+
+        // Room timer
+        roomTimer += Time.deltaTime;
+        if (roomTimer >= roomDuration)
+        {
+            roomTimer = 0f;
+            ResetRoom(currentRoom);
+            SwitchToRandomRoom();
+        }
+    }
+
+    public void TriggerGameOver()
+    {
+        // Stop room switching and notify
+        if (gameOver) return;
+        gameOver = true;
+        onGameOver?.Invoke();
+    }
+
+    void SwitchToRandomRoom()
+    {
+        // Random room, optional no-repeat
+        if (rooms == null || rooms.Length == 0) return;
+
+        int next = UnityEngine.Random.Range(0, rooms.Length);
+        if (avoidRepeat && rooms.Length > 1)
+        {
+            int guard = 0;
+            while (next == currentRoom && guard < 20)
+            {
+                next = UnityEngine.Random.Range(0, rooms.Length);
+                guard++;
+            }
+        }
+
+        currentRoom = next;
+        roomTimer = 0f;
+
+        SetActiveRoom(currentRoom);
+
+        if (cameraSwitcher != null)
+        {
+            cameraSwitcher.SwitchTo(rooms[currentRoom].cameraIndex);
+        }
+
+        // Reset active room after switch
+        ResetRoom(currentRoom);
+    }
+
+    void ResetRoom(int index)
+    {
+        // Call ResetRoom() on all behaviours that implement IRoomResettable
+        if (rooms == null || index < 0 || index >= rooms.Length) return;
+        RoomEntry room = rooms[index];
+        if (room.resetBehaviours == null) return;
+
+        for (int i = 0; i < room.resetBehaviours.Length; i++)
+        {
+            MonoBehaviour mb = room.resetBehaviours[i];
+            if (mb is IRoomResettable r) r.ResetRoom();
+        }
+    }
+
+    void SetActiveRoom(int index)
+    {
+        // Disable all rooms except active one
+        if (rooms == null) return;
+        for (int i = 0; i < rooms.Length; i++)
+        {
+            if (rooms[i].roomRoot != null)
+            {
+                rooms[i].roomRoot.SetActive(i == index);
+            }
+        }
+    }
+}
