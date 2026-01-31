@@ -1,5 +1,62 @@
 {
     "name": "Controls",
-    "maps": [],
+    "maps": [
+        {
+            "name": "Player",
+            "id": "6d24459d-2c80-4fd3-b946-f80a8499e2b2",
+            "actions": [
+                {
+                    "name": "Steer",
+                    "type": "Value",
+                    "id": "1bbd2ccd-44ec-4c28-a0c4-b67e5742c4fb",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "9916c7e4-6577-4d4a-b0c9-1be5baa936a5",
+                    "path": "<Gamepad>/leftStick/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Steer",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Player Room 3",
+            "id": "d36e46a7-dfea-43e2-8ffb-68098abca256",
+            "actions": [
+                {
+                    "name": "leftStickMove",
+                    "type": "Value",
+                    "id": "52a00975-83aa-470c-a719-fd597f483d00",
+                    "expectedControlType": "Stick",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "dd2886a3-b9c8-45f6-bd97-534344f04a7b",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "leftStickMove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
     "controlSchemes": []
 }
