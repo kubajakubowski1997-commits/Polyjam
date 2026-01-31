@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -48,6 +49,9 @@ public class AnalogController : MonoBehaviour
 
             if (Gamepad.current != null && Gamepad.current.leftTrigger.wasPressedThisFrame)
             {
+                //if (Gamepad.current != null)
+                    StartCoroutine(Vibrate(0f, 0.5f, 0.35f)); // lowMotor, highMotor, czas
+                
                 GameObject hitObj = ShootFromCrosshair(cursorLeft, "GoodThought", activeCam); // FIX
                 if (hitObj != null)
                 {
@@ -56,6 +60,9 @@ public class AnalogController : MonoBehaviour
                     // FIX: bezpieczne wywołanie OnHit
                     var good = hitObj.GetComponent<GoodThoughtMovement>();
                     if (good != null) good.OnHit();
+                    
+                    Gamepad.current.SetMotorSpeeds(0.6f, 0.0f); // lewy silnik 30%, prawy 0%
+                    StartCoroutine(StopRumble(0.60f)); 
                 }
             }
         }
@@ -79,6 +86,9 @@ public class AnalogController : MonoBehaviour
                     // Bezpieczne wywołanie OnHit
                     var bad = hitObj.GetComponent<BadThoughtProjectile>();
                     if (bad != null) bad.OnHit();
+                    
+                    Gamepad.current.SetMotorSpeeds(0.0f, 0.6f); // lewy silnik 0%, prawy 30%
+                    StartCoroutine(StopRumble(0.15f));
                 }
             }
         }
@@ -134,5 +144,23 @@ public class AnalogController : MonoBehaviour
             }
         }
         return null;
+    }
+    
+    private IEnumerator StopRumble(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        if (Gamepad.current != null)
+            Gamepad.current.SetMotorSpeeds(0f, 0f);
+    }
+    
+    private IEnumerator Vibrate(float lowMotor, float highMotor, float duration)
+    {
+        //if (Gamepad.current != null)
+            Gamepad.current.SetMotorSpeeds(lowMotor, highMotor);
+
+        yield return new WaitForSeconds(duration);
+
+        //if (Gamepad.current != null)
+            Gamepad.current.SetMotorSpeeds(0f, 0f);
     }
 }

@@ -12,8 +12,15 @@ public class GoodThoughtMovement : MonoBehaviour
     [Header("Vertical Sine")]
     [SerializeField] private float verticalAmplitude = 0.25f;
     [SerializeField] private float verticalDuration = 2f;
+    
+    [Header("Tween Settings")]
+    public float flyDuration = 0.5f; // czas lotu do głowy
+    public float scaleDuration = 0.3f; // czas znikania
+    public float endScale = 0.1f;
 
     private Vector3 offset;
+    private bool hasBeenHit;
+    private bool isFlyingToHead;
 
     private void Awake()
     {
@@ -24,9 +31,10 @@ public class GoodThoughtMovement : MonoBehaviour
 
     private void OnEnable()
     {
+        hasBeenHit = false;
+        isFlyingToHead = false;
         if (focalPoint == null) return;
 
-        // 🔑 KLUCZ: zachowujemy losowy spawn
         offset = transform.position - focalPoint.position;
 
         StartVerticalSine();
@@ -34,9 +42,9 @@ public class GoodThoughtMovement : MonoBehaviour
 
     private void Update()
     {
-        if (focalPoint == null) return;
+        if (focalPoint == null || isFlyingToHead) return; // zatrzymanie orbity podczas lotu
 
-        // ORBITA — tylko obrót offsetu
+        // ORBITA — obrót offsetu
         offset = Quaternion.AngleAxis(
             orbitSpeed * Time.deltaTime,
             Vector3.up
@@ -47,6 +55,7 @@ public class GoodThoughtMovement : MonoBehaviour
 
     private void StartVerticalSine()
     {
+        transform.DOKill(); // usuń wcześniejsze tweeny
         transform
             .DOLocalMoveY(
                 transform.localPosition.y + verticalAmplitude,
@@ -63,11 +72,33 @@ public class GoodThoughtMovement : MonoBehaviour
     
     public void OnHit()
     {
+        if (hasBeenHit) return;
+        hasBeenHit = true;
+        isFlyingToHead = true; // zatrzymuje orbitę
+
         Debug.Log("GoodThought trafiony: " + name);
 
-        // Tutaj możesz dodać animację, efekt, dźwięk itp.
+        if (focalPoint == null)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
-        // Na razie zniszczenie obiektu:
-        Destroy(gameObject);
+        // zatrzymaj sinusoidę
+        transform.DOKill();
+
+        // --- Animacja lotu do głowy ---
+        transform.DOMove(focalPoint.position, flyDuration)
+            .SetEase(Ease.InQuad)
+            .OnComplete(() =>
+            {
+                // --- Animacja znikania / skalowania ---
+                transform.DOScale(endScale, scaleDuration)
+                    .SetEase(Ease.InBack)
+                    .OnComplete(() =>
+                    {
+                        Destroy(gameObject);
+                    });
+            });
     }
 }

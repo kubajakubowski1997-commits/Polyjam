@@ -700,6 +700,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 813611143266669406, guid: 1bca42d307ef86a49b5f312b01f8ddce, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1523563723787906662, guid: 1bca42d307ef86a49b5f312b01f8ddce, type: 3}
       propertyPath: m_LocalPosition.x
       value: 200
@@ -1000,7 +1004,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   room1Canvas: {fileID: 0}
   room2Canvas: {fileID: 0}
-  room3Canvas: {fileID: 0}
+  room3Canvas: {fileID: 1841198049}
   room4Canvas: {fileID: 0}
   room5Canvas: {fileID: 0}
   cameras:
@@ -1106,6 +1110,11 @@ MonoBehaviour:
       BarrelClipping: 0.25
       Anamorphism: 0
   BlendHint: 0
+--- !u!223 &1841198049 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 6639354196844955949, guid: 1bca42d307ef86a49b5f312b01f8ddce, type: 3}
+  m_PrefabInstance: {fileID: 643996976}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1956611665
 GameObject:
   m_ObjectHideFlags: 0
