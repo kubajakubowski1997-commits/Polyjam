@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -32,12 +33,15 @@ public class GameManager : MonoBehaviour
 
     [Header("Game Over")]
     public UnityEvent onGameOver;
+    [Tooltip("Opóźnienie przed Game Over (sekundy).")]
+    public float gameOverDelay = 0.5f;
 
     public static float Difficulty { get; private set; } = 1f;
 
     int currentRoom = -1;
     float roomTimer;
     bool gameOver;
+    bool gameOverPending;
 
     void Awake()
     {
@@ -81,6 +85,15 @@ public class GameManager : MonoBehaviour
         // Stop room switching and notify
         if (gameOver) return;
         gameOver = true;
+        if (gameOverPending) return;
+        gameOverPending = true;
+        StartCoroutine(DelayedGameOver());
+    }
+
+    private System.Collections.IEnumerator DelayedGameOver()
+    {
+        float delay = Mathf.Max(0f, gameOverDelay);
+        if (delay > 0f) yield return new WaitForSeconds(delay);
         DisableAllRooms();
         onGameOver?.Invoke();
     }
@@ -153,5 +166,17 @@ public class GameManager : MonoBehaviour
                 rooms[i].roomRoot.SetActive(false);
             }
         }
+    }
+
+    public void RestartCurrentScene()
+    {
+        // Reload active scene.
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void GoToMainMenu()
+    {
+        // Load first scene in build settings.
+        SceneManager.LoadScene(0);
     }
 }
