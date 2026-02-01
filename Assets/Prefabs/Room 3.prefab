@@ -1002,8 +1002,8 @@ MonoBehaviour:
   goodThoughtPrefab: {fileID: 8413235534669416334, guid: e8810f32983f98b4ea4186399ff02b7a, type: 3}
   minDistance: 2.5
   maxDistance: 6
-  minSpawnTime: 8
-  maxSpawnTime: 16
+  minSpawnTime: 3
+  maxSpawnTime: 5
 --- !u!1001 &5265595190129178103
 PrefabInstance:
   m_ObjectHideFlags: 0

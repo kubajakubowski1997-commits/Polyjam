@@ -150,5 +150,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   orbitSpeed: 30
-  verticalAmplitude: 0.25
+  verticalAmplitude: 0.42
   verticalDuration: 2
+  flyDuration: 0.5
+  scaleDuration: 0.3
+  endScale: 0.1
+  onCaught:
+    m_PersistentCalls:
+      m_Calls: []
