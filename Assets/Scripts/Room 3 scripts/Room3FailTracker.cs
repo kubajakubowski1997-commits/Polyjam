@@ -10,10 +10,6 @@ public class Room3FailTracker : MonoBehaviour, IRoomResettable
     [Tooltip("Jak długo trwa room, zanim sprawdzimy warunek porażki.")]
     public float roomDuration = 10f;
 
-    [Header("Refs")]
-    [Tooltip("Opcjonalnie: wywołuje globalne Game Over przy porażce.")]
-    public GameManager gameManager;
-
     [Header("Fail")]
     public UnityEvent onFail;
 
@@ -61,10 +57,6 @@ public class Room3FailTracker : MonoBehaviour, IRoomResettable
 
         failTriggered = true;
         onFail?.Invoke();
-        if (gameManager != null)
-        {
-            gameManager.TriggerGameOver();
-        }
     }
 
     public void ResetRoom()

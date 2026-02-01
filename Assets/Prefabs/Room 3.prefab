@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 2580318347336313241}
   - component: {fileID: 4960699608411986831}
   - component: {fileID: 8826690926064310398}
+  - component: {fileID: 3393494009762048639}
   m_Layer: 0
   m_Name: Room3PlayerController
   m_TagString: Untagged
@@ -157,6 +158,35 @@ MonoBehaviour:
   deadzone: 0.15
   steerSmoothing: 12
   maxDistance: 50
+--- !u!114 &3393494009762048639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 795709903466593248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d01d897b5821574eae717cee5c76c05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  badThoughtsToFail: 3
+  roomDuration: 10
+  onFail:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: TriggerGameOver
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1538716147659118874
 GameObject:
   m_ObjectHideFlags: 0
