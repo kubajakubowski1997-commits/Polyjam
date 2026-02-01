@@ -81,6 +81,7 @@ public class GameManager : MonoBehaviour
         // Stop room switching and notify
         if (gameOver) return;
         gameOver = true;
+        DisableAllRooms();
         onGameOver?.Invoke();
     }
 
@@ -137,6 +138,19 @@ public class GameManager : MonoBehaviour
             if (rooms[i].roomRoot != null)
             {
                 rooms[i].roomRoot.SetActive(i == index);
+            }
+        }
+    }
+
+    public void DisableAllRooms()
+    {
+        // Disable all room roots on game over.
+        if (rooms == null) return;
+        for (int i = 0; i < rooms.Length; i++)
+        {
+            if (rooms[i].roomRoot != null)
+            {
+                rooms[i].roomRoot.SetActive(false);
             }
         }
     }
