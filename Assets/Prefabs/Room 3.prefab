@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   badThoughtsToFail: 3
-  roomDuration: 10
+  roomDuration: 20
   onFail:
     m_PersistentCalls:
       m_Calls:
