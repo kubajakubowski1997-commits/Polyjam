@@ -1,40 +1,49 @@
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Events;
 using DG.Tweening;
 
 public class GoodThoughtMovement : MonoBehaviour
 {
+    // Cel orbitowania (głowa gracza).
     [Header("Target")]
     private Transform focalPoint;
 
     [Header("Orbit")]
-    [SerializeField] private float orbitSpeed = 30f; // stopnie na sekundÄ™
+    [SerializeField] private float orbitSpeed = 30f; // stopnie na sekundę
 
     [Header("Vertical Sine")]
     [SerializeField] private float verticalAmplitude = 0.25f;
     [SerializeField] private float verticalDuration = 2f;
-    
+
     [Header("Tween Settings")]
-    public float flyDuration = 0.5f; // czas lotu do gĹ‚owy
-    public float scaleDuration = 0.3f; // czas znikania
+    public float flyDuration = 0.5f; // czas lotu do głowy
+    public float scaleDuration = 0.3f; // czas zmniejszania
     public float endScale = 0.1f;
 
+    [Header("Events")]
+    public UnityEvent onCaught;
+
+    // Offset i flagi stanu.
     private Vector3 offset;
     private bool hasBeenHit;
     private bool isFlyingToHead;
 
     private void OnEnable()
     {
+        // Ustal cel przy każdym włączeniu obiektu.
         if (focalPoint == null)
         {
             GameObject fp = GameObject.FindWithTag("PlayerHead");
-            if (fp != null)
-                focalPoint = fp.transform;
+            if (fp != null) focalPoint = fp.transform;
         }
+
+        // Reset stanu.
         hasBeenHit = false;
         isFlyingToHead = false;
+        if (onCaught == null) onCaught = new UnityEvent();
         if (focalPoint == null) return;
 
-        // đź”‘ KLUCZ: zachowujemy losowy spawn
+        // Zachowujemy offset do orbitowania.
         offset = transform.position - focalPoint.position;
 
         StartVerticalSine();
@@ -42,9 +51,10 @@ public class GoodThoughtMovement : MonoBehaviour
 
     private void Update()
     {
-        if (focalPoint == null || isFlyingToHead) return; // zatrzymanie orbity podczas lotu
+        // Zatrzymaj orbitę podczas lotu do głowy.
+        if (focalPoint == null || isFlyingToHead) return;
 
-        // ORBITA â€” obrĂłt offsetu
+        // Obrót offsetu wokół osi Y.
         offset = Quaternion.AngleAxis(
             orbitSpeed * Time.deltaTime,
             Vector3.up
@@ -55,6 +65,7 @@ public class GoodThoughtMovement : MonoBehaviour
 
     private void StartVerticalSine()
     {
+        // Delikatna oscylacja w pionie.
         transform
             .DOLocalMoveY(
                 transform.localPosition.y + verticalAmplitude,
@@ -66,18 +77,19 @@ public class GoodThoughtMovement : MonoBehaviour
 
     private void OnDisable()
     {
+        // Sprzątanie tweenów po wyłączeniu obiektu.
         transform.DOKill();
     }
-    
+
     public void OnHit()
     {
-        Debug.Log("GoodThought trafiony: " + name);
-
-        // Tutaj moĹĽesz dodaÄ‡ animacjÄ™, efekt, dĹşwiÄ™k itp.
-        // Zabezpieczenie przed wielokrotnym wywoĹ‚aniem
+        // Zabezpieczenie przed wielokrotnym trafieniem.
         if (hasBeenHit) return;
         hasBeenHit = true;
-        isFlyingToHead = true; // zatrzymuje orbitÄ™
+        isFlyingToHead = true;
+
+        // Powiadomienie o złapaniu zielonej myśli.
+        onCaught?.Invoke();
 
         if (focalPoint == null)
         {
@@ -85,21 +97,18 @@ public class GoodThoughtMovement : MonoBehaviour
             return;
         }
 
-        // zatrzymaj sinusoidÄ™ i inne tweens
+        // Zatrzymaj oscylację i inne tweens.
         transform.DOKill();
 
-        // --- Animacja lotu do gĹ‚owy ---
+        // Lot do głowy, potem zmniejszenie i zniszczenie.
         transform.DOMove(focalPoint.position, flyDuration)
             .SetEase(Ease.InQuad)
             .OnComplete(() =>
             {
-                // --- Animacja znikania / skalowania ---
                 transform.DOScale(endScale, scaleDuration)
                     .SetEase(Ease.InBack)
-                    .OnComplete(() =>
-                    {
-                        Destroy(gameObject);
-                    });
+                    .OnComplete(() => Destroy(gameObject));
             });
     }
 }
+
