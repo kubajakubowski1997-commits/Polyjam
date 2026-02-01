@@ -117,6 +117,8 @@ public class GameManager : MonoBehaviour
         currentRoom = next;
         roomTimer = 0f;
 
+        // Reset the next room before it becomes active/visible.
+        ResetRoom(currentRoom);
         SetActiveRoom(currentRoom);
 
         if (cameraSwitcher != null)
@@ -124,8 +126,6 @@ public class GameManager : MonoBehaviour
             cameraSwitcher.SwitchTo(rooms[currentRoom].cameraIndex);
         }
 
-        // Reset active room after switch
-        ResetRoom(currentRoom);
     }
 
     void ResetRoom(int index)

@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d01d897b5821574eae717cee5c76c05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  badThoughtsToFail: 3
+  badThoughtsToFail: 5
   roomDuration: 20
   onFail:
     m_PersistentCalls:

@@ -545,6 +545,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3393494009762048639, guid: 1bca42d307ef86a49b5f312b01f8ddce, type: 3}
+      propertyPath: roomDuration
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3393494009762048639, guid: 1bca42d307ef86a49b5f312b01f8ddce, type: 3}
+      propertyPath: badThoughtsToFail
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3393494009762048639, guid: 1bca42d307ef86a49b5f312b01f8ddce, type: 3}
       propertyPath: onFail.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1542541368}
@@ -777,6 +785,10 @@ PrefabInstance:
       propertyPath: onFail.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1542541368}
+    - target: {fileID: 4850906767846957392, guid: 1f66271aa48b0dc40867c3136109f66c, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6797332388760106285, guid: 1f66271aa48b0dc40867c3136109f66c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
